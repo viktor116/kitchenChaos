@@ -1,13 +1,43 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour{
+
+    public static Player Instance{ get;private set; }
+    public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
+
+    public class OnSelectedCounterChangedEventArgs : EventArgs{
+        public ClearCounter selectedCounter;
+    }
+
     //SerializeField可以在unity编辑器使用
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private GameInput gameInput;
+    [SerializeField] private LayerMask counterLayerMask;
+
     public float rotationSpeed = 10f;
     private bool isWalking = false;
+    private Vector3 lastInteractDir;
+    private ClearCounter selectClearCounter;
+
+    private void Awake(){
+        if (Instance != null){
+            Debug.LogError("this is a singleton but find Instance already exists");
+        }
+        Instance = this;
+    }
+
+    private void Start(){
+        gameInput.OnInteractAction += GameInputOnInteractAction;
+    }
+
+    private void GameInputOnInteractAction(object sender, EventArgs e){
+        if (selectClearCounter!=null){
+            selectClearCounter.Interact();
+        }
+    }
 
     void Update(){
         HandleMovement();
@@ -17,11 +47,23 @@ public class Player : MonoBehaviour{
     private void HandleInteraction(){
         Vector2 inputVector = gameInput.GetMovementVectorNormalized();
         Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
+
+        if (moveDir != Vector3.zero){
+            lastInteractDir = moveDir;
+        }
+
         float interactDistance = 2f;
-        if (Physics.Raycast(transform.position, moveDir, out RaycastHit raycastHit, interactDistance)){
-            Debug.Log(raycastHit.transform);
+        if (Physics.Raycast(transform.position, lastInteractDir, out RaycastHit raycastHit, interactDistance,
+                counterLayerMask)){
+            if (raycastHit.transform.TryGetComponent(out ClearCounter clearCounter)){
+                if (clearCounter != selectClearCounter){
+                    setSelectedCounter(clearCounter);
+                }
+            }else{
+                setSelectedCounter(null);
+            }
         }else{
-            Debug.Log("-");   
+            setSelectedCounter(null);
         }
     }
 
@@ -63,5 +105,12 @@ public class Player : MonoBehaviour{
 
     public bool IsWalking(){
         return isWalking;
+    }
+
+    private void setSelectedCounter(ClearCounter counter){
+        this.selectClearCounter = counter;
+        OnSelectedCounterChanged ? .Invoke(this,new OnSelectedCounterChangedEventArgs{
+            selectedCounter = selectClearCounter
+        });
     }
 }
