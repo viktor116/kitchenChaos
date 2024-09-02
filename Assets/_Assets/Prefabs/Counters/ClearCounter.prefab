@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 2708025316006146978}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -7, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -69,8 +69,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed39a82c63995204da4f96af85a14f65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  kitchenObjectSo: {fileID: 11400000, guid: 760385e28e9603f4da360bfbcd92bc32, type: 2}
   counterTopPoint: {fileID: 3188620484203687732}
+  kitchenObjectSo: {fileID: 11400000, guid: 760385e28e9603f4da360bfbcd92bc32, type: 2}
 --- !u!1 &5942211778074283272
 GameObject:
   m_ObjectHideFlags: 0

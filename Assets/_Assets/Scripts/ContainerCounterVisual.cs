@@ -20,7 +20,6 @@ public class ContainerCounterVisual : MonoBehaviour{
     }
 
     private void ContainCounterOnPlayerGrabbedObject(object sender, EventArgs e){
-        Debug.Log("tragger");
         animator.SetTrigger(OPEN_CLOSE);
     }
 }
