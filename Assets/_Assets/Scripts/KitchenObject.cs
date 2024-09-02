@@ -5,29 +5,29 @@ using UnityEngine;
 public class KitchenObject : MonoBehaviour{
     [SerializeField] private KitchenObjectSO kitchenObjectSO;
 
-    private ClearCounter clearCounter;
+    private IKitchenObjectParent kitchenObjectParent;
 
     public KitchenObjectSO GetKitchenObjectSO(){
         return kitchenObjectSO;
     }
 
-    public void setClearCounter(ClearCounter clearCounter){
-        if (this.clearCounter != null){
-            this.clearCounter.ClearKitchenObject();
+    public void SetKitchenObjectParent(IKitchenObjectParent kitchenObjectParent){
+        if (this.kitchenObjectParent != null){
+            this.kitchenObjectParent.ClearKitchenObject();
         }
-        this.clearCounter = clearCounter;
-        if (clearCounter.HasKitchenObject()){
+        this.kitchenObjectParent = kitchenObjectParent;
+        if (kitchenObjectParent.HasKitchenObject()){
             Debug.LogError("Counter already has a kitchenObject");
         }
         
-        clearCounter.SetKitchenObject(this);
+        kitchenObjectParent.SetKitchenObject(this);
         
-        transform.parent = clearCounter.GetKitchenObjectFollowTransform();
+        transform.parent = kitchenObjectParent.GetKitchenObjectFollowTransform();
         transform.localPosition = Vector3.zero;
     }
 
-    public ClearCounter getClearCounter(){
-        return this.clearCounter;
+    public IKitchenObjectParent GetKitchenObjectParent(){
+        return kitchenObjectParent;
     }
 
 }
