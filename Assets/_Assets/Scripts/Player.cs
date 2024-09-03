@@ -17,12 +17,14 @@ public class Player : MonoBehaviour,IKitchenObjectParent{
     [SerializeField] private GameInput gameInput;
     [SerializeField] private LayerMask counterLayerMask;
     [SerializeField] private Transform holdTopPoint;
+    // [SerializeField] private int defaultAccelerateTime = 30;
 
     public float rotationSpeed = 10f;
     private bool isWalking = false;
     private Vector3 lastInteractDir;
     private BaseCounter selectClearCounter;
     private KitchenObject kitchenObject;
+    // private int accelerateTime = 0;
 
     private void Awake(){
         if (Instance != null){
@@ -33,6 +35,20 @@ public class Player : MonoBehaviour,IKitchenObjectParent{
 
     private void Start(){
         gameInput.OnInteractAction += GameInputOnInteractAction;
+        gameInput.OnInteractAlternateAction += GameInputOnInteractAlternateAction;
+        gameInput.OnAccelerate += GameInputOnOnAccelerate;
+    }
+
+    private void GameInputOnOnAccelerate(object sender, EventArgs e){
+        if (IsWalking()){
+            // accelerateTime = defaultAccelerateTime;
+        }
+    }
+
+    private void GameInputOnInteractAlternateAction(object sender, EventArgs e){
+        if (selectClearCounter!=null){
+            selectClearCounter.InteractAlternate(this);
+        }
     }
 
     private void GameInputOnInteractAction(object sender, EventArgs e){
