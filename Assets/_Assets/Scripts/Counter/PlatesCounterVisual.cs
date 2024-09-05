@@ -17,6 +17,13 @@ public class PlatesCounterVisual : MonoBehaviour{
 
     private void Start(){
         platesCounter.OnPlateSpawn += PlatesCounterOnPlateSpawn;
+        platesCounter.OnPlateRemoved += PlatesCounterOnPlateRemoved;
+    }
+
+    private void PlatesCounterOnPlateRemoved(object sender, EventArgs e){
+        GameObject plateGameObject = plateVisualGameObjectList[plateVisualGameObjectList.Count - 1];
+        plateVisualGameObjectList.Remove(plateGameObject);
+        Destroy(plateGameObject);
     }
 
     private void PlatesCounterOnPlateSpawn(object sender, EventArgs e){
