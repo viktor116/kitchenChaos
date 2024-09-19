@@ -148,7 +148,7 @@ public class Player : MonoBehaviour,IKitchenObjectParent{
         }
     }
 
-    public KitchenObject GetKitchenObject(){
+    public KitchenObject GetKitchenObject(){ 
         return kitchenObject;
     }
 
