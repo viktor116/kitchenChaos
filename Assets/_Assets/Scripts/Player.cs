@@ -40,6 +40,8 @@ public class Player : MonoBehaviour,IKitchenObjectParent{
         gameInput.OnAccelerate += GameInputOnOnAccelerate;
     }
 
+   
+
     private void GameInputOnOnAccelerate(object sender, EventArgs e){
         if (IsWalking()){
             // accelerateTime = defaultAccelerateTime;
