@@ -7,11 +7,14 @@ using UnityEngine.InputSystem;
 
 public class GameInput : MonoBehaviour{
 
+    private const string PLAYER_PREFS_BINDINGS = "InputBindings";
+
     public static GameInput Instance{ get ; private set; }
     public event EventHandler OnInteractAction;
     public event EventHandler OnInteractAlternateAction;
     public event EventHandler OnAccelerate;
     public event EventHandler OnPauseAction;
+    public event EventHandler OnBindingRebind; 
 
     private PlayerInputActions playerInputActions;
 
@@ -23,11 +26,19 @@ public class GameInput : MonoBehaviour{
         Interact,
         InteractAlternate,
         Pause,
+        GamepadInteract,
+        GamepadInteractAlternate,
+        GamepadPause
     }
 
     private void Awake(){
         Instance = this;
         playerInputActions = new PlayerInputActions();
+
+        if (PlayerPrefs.HasKey(PLAYER_PREFS_BINDINGS)){
+            playerInputActions.LoadBindingOverridesFromJson(PlayerPrefs.GetString(PLAYER_PREFS_BINDINGS)); 
+        }
+
         playerInputActions.Player.Enable();
         playerInputActions.Player.Interact.performed += InteractOnPerformed; //添加事件
         playerInputActions.Player.InteractAlternate.performed += InteractAlternateOnPerformed;
@@ -83,6 +94,12 @@ public class GameInput : MonoBehaviour{
                 return playerInputActions.Player.InteractAlternate.bindings[0].ToDisplayString();
             case Binding.Pause:
                 return playerInputActions.Player.Pause.bindings[0].ToDisplayString();
+            case Binding.GamepadInteract:
+                return playerInputActions.Player.Interact.bindings[1].ToDisplayString();
+            case Binding.GamepadInteractAlternate:
+                return playerInputActions.Player.InteractAlternate.bindings[1].ToDisplayString();
+            case Binding.GamepadPause:
+                return playerInputActions.Player.Pause.bindings[1].ToDisplayString();
             default:
                 return "error";
         }
@@ -122,6 +139,18 @@ public class GameInput : MonoBehaviour{
                 inputAction = playerInputActions.Player.Pause;
                 bindingIndex = 0;
                 break;
+            case Binding.GamepadInteract:
+                inputAction = playerInputActions.Player.Interact;
+                bindingIndex = 1;
+                break;
+            case Binding.GamepadInteractAlternate:
+                inputAction = playerInputActions.Player.InteractAlternate;
+                bindingIndex = 1;
+                break;
+            case Binding.GamepadPause:
+                inputAction = playerInputActions.Player.Pause;
+                bindingIndex = 1;
+                break;
         }
         
         
@@ -129,6 +158,10 @@ public class GameInput : MonoBehaviour{
             callback.Dispose();
             playerInputActions.Player.Enable();
             onActionRebound();
+            PlayerPrefs.SetString(PLAYER_PREFS_BINDINGS,playerInputActions.SaveBindingOverridesAsJson());
+            PlayerPrefs.Save();
+            
+            OnBindingRebind?.Invoke(this,EventArgs.Empty);
         }).Start();
     }
 }
