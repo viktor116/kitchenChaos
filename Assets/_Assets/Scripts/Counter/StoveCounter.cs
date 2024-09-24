@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class StoveCounter : BaseCounter,IHasProgress{
     
@@ -165,5 +166,8 @@ public class StoveCounter : BaseCounter,IHasProgress{
         }
         return null;
     }
-    
+
+    public bool isFried(){
+        return state == State.Fried;
+    }
 }

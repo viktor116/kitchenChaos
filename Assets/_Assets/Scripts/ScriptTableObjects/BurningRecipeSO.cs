@@ -6,5 +6,5 @@ using UnityEngine;
 public class BurningRecipeSO : ScriptableObject{
     public KitchenObjectSO input;
     public KitchenObjectSO output;
-    public float burningTimerMax=3;
+    public float burningTimerMax=6;
 }

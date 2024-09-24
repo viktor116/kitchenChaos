@@ -15,7 +15,7 @@ public class GameOverUI : MonoBehaviour{
    private void KitchenGameManagerOnStateChanged(object sender, EventArgs e){
       if (KitchenGameManager.Instance.IsGameOver()){
          Show();
-         recipesDeliveredText.text = DeliveryManager.Instance.GetSuccessfulRecipesAmount().ToString(); //todo waiting update
+         recipesDeliveredText.text = DeliveryManager.Instance.GetSuccessfulRecipesAmount().ToString();
       }
       else{
          Hide();
